@@ -1,7 +1,6 @@
-#include <iostream>
-
+#include "HolaMundo.h"
 int main()
 {
-    std::cout << "Hola Mundo!\n";
+    print("Hola Mundo!");
     return 0;
 }
