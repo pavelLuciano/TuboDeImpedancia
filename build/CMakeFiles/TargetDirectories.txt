@@ -1,0 +1,3 @@
+/home/pavel/Dev/TuboDeImpedancia/build/CMakeFiles/MyProgram.dir
+/home/pavel/Dev/TuboDeImpedancia/build/CMakeFiles/edit_cache.dir
+/home/pavel/Dev/TuboDeImpedancia/build/CMakeFiles/rebuild_cache.dir
