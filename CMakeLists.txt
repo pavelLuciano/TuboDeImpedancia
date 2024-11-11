@@ -17,11 +17,15 @@ set(PORTAUDIO_DIR "${DEPS_DIR}/portaudio")
 set(IMPLOT_DIR "${DEPS_DIR}/implot")
 
 # Incluir los directorios de cabeceras
+include_directories("/usr/local/include")
 include_directories(${INCLUDE_DIR})
 include_directories(${DEPS_DIR})
 include_directories(${IMGUI_DIR})
 include_directories(${IMPLOT_DIR})
 include_directories(${PORTAUDIO_DIR}/include)
+
+
+link_directories("/usr/local/lib")
 
 # Buscar los archivos fuente en src/
 file(GLOB SOURCES "${SRC_DIR}/*.cpp")
@@ -53,6 +57,8 @@ find_package(Threads REQUIRED)
 target_link_libraries(MyProgram
     ${CMAKE_THREAD_LIBS_INIT}
     ${OPENGL_LIBRARIES}
+    fftw3
+    fftw3f
     glfw         # Librería GLFW
     #rt           # Librería tiempo real
     asound       # ALSA para audio

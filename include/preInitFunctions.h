@@ -2,8 +2,8 @@
 #include <GLFW/glfw3.h>
 
 //GLFW Y GLEW
-const int HEIGHT = 800;
-const int WIDTH = 600;
+const int HEIGHT = 600;
+const int WIDTH = 1200;
 const char* WINDOW_NAME = "IMGUI";
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);

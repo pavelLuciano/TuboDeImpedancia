@@ -4,13 +4,23 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "implot.h"
-
 #include "audiocapture.h"
+#include "calibracion.h"
 
 #include <fstream>
+#include <sstream>
+#include <iostream>
 
-#define file_path "../output/amplitudes.txt"
+#define file_path   "../output/amplitudes.txt"
+#define l_file_path "../output/l_amplitudes.txt"
+#define r_file_path "../output/r_amplitudes.txt"
+#define d_file_path "../output/d_amplitudes.txt"
 
+#define C0_SOUND_SPEED 343.2
+#define LAMBDA         1
+#define p_DENSITY      1.186
+
+using namespace AudioCapture;
 
 int main()
 {
@@ -22,14 +32,12 @@ int main()
     ImPlot::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); //(void) io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     //io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(miVentana, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
     ImGui_ImplOpenGL3_Init();
-
-
     int display_w, display_h;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
@@ -38,7 +46,7 @@ int main()
     ///////////////////////////////////////////////////////
     PaError err;
     err = Pa_Initialize();
-    checkErr(err);
+    tdi::checkErr(err);
 
     int numDevices = Pa_GetDeviceCount();
     const PaDeviceInfo* deviceInfo[numDevices];
@@ -46,30 +54,27 @@ int main()
         deviceInfo[i] = Pa_GetDeviceInfo(i);
 
 
-
-    // ARCHIVOS
-    std::ifstream amplitudes(file_path);
-    if(!amplitudes)
-    {
-        std::cout << "ERROR AL LEER ARCHIVO\n";
-        return 0;
-    }
-    std::string valor;
-
-
-
-    //considera 48000 Hz
-    int i = 0;
-    float data_y[1000];
-    while(std::getline(amplitudes, valor))
-    {
-        if (i%218 == 0) data_y[i/218] = stof(valor);
-        i++;
-    }
-
-
-    bool show_demo_window = false;
+    //IMGUI EXAMPLE
+    static float f = 0.0f;
+    static int counter = 0;
+    bool show_demo_window = true;
     bool show_another_window = false;
+
+    //TUBO DE IMPEDANCIA
+    bool isInputDeviceSelected = false,
+         isRecordStarted = false,
+         isRecordFinish = false,
+         calibration_factor = false;
+    float rms1, rms2, dB1, dB2;
+    float *frec_spec;
+    float *H_12_I = NULL;
+    float *H_12_II = NULL;
+    float *Hc = NULL;
+    int device_selected_idx = -1;
+    tdi::CalibrationData* data;
+    tdi::CalibrationData* HI_data;
+    tdi::CalibrationData* HII_data;
+    PaStream* stream;
 
     while(!glfwWindowShouldClose(miVentana))
     {
@@ -94,80 +99,148 @@ int main()
         if (show_demo_window)
             ImGui::ShowDemoWindow(&show_demo_window);
 
-        // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
+        //Flujo del Tubo De Impedancia
+        if (!isInputDeviceSelected)
         {
-            static float f = 0.0f;
-            static int counter = 0;
-
-            ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-            //implot
-            if (ImPlot::BeginPlot("My Plot"))
-            {
-                ImPlot::PlotLine("My Line Plot", data_y, 1000);
-                ImPlot::EndPlot();
-            }
-            ImGui::End();
-
             ImGui::Begin("Device Selection");
-            static int device_selected_idx = -1;
             if (ImGui::BeginListBox("Devices"))
             {
                 for (int i = 0; i < numDevices; i++)
                 {
-                    //deviceInfo = Pa_GetDeviceInfo(i);
-                    if (ImGui::Selectable(deviceInfo[i]->name, device_selected_idx == i))
+
+                    std::ostringstream oss;
+                    oss << i << " # " << (deviceInfo[i]->name);
+
+                    if (ImGui::Selectable(oss.str().c_str(), device_selected_idx == i))
                         device_selected_idx = i;
                 }
-                ImGui::EndListBox();
-                if (device_selected_idx > -1)
+            }ImGui::EndListBox();
+            if (device_selected_idx > -1)
+            {
+                ImGui::Text("Nombre:               %s", deviceInfo[device_selected_idx]->name);
+                ImGui::Text("Max Inputs Channels:  %i", deviceInfo[device_selected_idx]->maxInputChannels);
+                ImGui::Text("Max Outputs Channels: %i", deviceInfo[device_selected_idx]->maxOutputChannels);
+                ImGui::Text("Default Smaple Rate:  %f", deviceInfo[device_selected_idx]->defaultSampleRate);
+
+                if(ImGui::Button("Cargar dispositivo"))
                 {
-                    ImGui::Text("Nombre:               %s", deviceInfo[device_selected_idx]->name);
-                    ImGui::Text("Max Inputs Channels:  %i", deviceInfo[device_selected_idx]->maxInputChannels);
-                    ImGui::Text("Max Outputs Channels: %i", deviceInfo[device_selected_idx]->maxOutputChannels);
-                    ImGui::Text("Default Smaple Rate:  %d", deviceInfo[device_selected_idx]->defaultSampleRate);
-                }
+                    isInputDeviceSelected = true;
+                    data     = new tdi::CalibrationData(10,(int)deviceInfo[device_selected_idx]->defaultSampleRate);
+                    HI_data  = new tdi::CalibrationData(10,(int)deviceInfo[device_selected_idx]->defaultSampleRate);
+                    HII_data = new tdi::CalibrationData(10,(int)deviceInfo[device_selected_idx]->defaultSampleRate);
+                } 
+            }
+            ImGui::End();
+        }
+        else
+        {
+            if (!isRecordStarted && Pa_IsStreamActive(stream) != 1)
+            {
+                std::cout << "Hola! ya iniciamos stream\n";
+                tdi::initAudioCaptureForCalibration(&stream, data, device_selected_idx);
+                Pa_Sleep(500);// me sicoseo
+                isRecordStarted = true;
+            }
+            if(!isRecordFinish && Pa_IsStreamActive(stream) == 0)
+            {
+                Pa_Sleep(500);// me sicoseo
+                tdi::closeAudioCaptureForCalibration(&stream);
                 
+                createWAV((*data).paraWAV,deviceInfo[device_selected_idx]->defaultSampleRate);
+
+                rms1 = tdi::calcularRMS((*data).signal_a, (*data).fs);
+                rms2 = tdi::calcularRMS((*data).signal_b, (*data).fs);
+                dB1 = tdi::rmsADecibelios(rms1);
+                dB2 = tdi::rmsADecibelios(rms2);
+                isRecordFinish = true;
+                calibration_factor = true;
+
+                tdi::fftFrecuencySpectrum(&frec_spec, (*data).signal_a, (*data).fs);
+            }
+    
+            ImGui::Begin("Audio Capture");
+            if (ImPlot::BeginPlot("My Plot"))
+            {
+                ImPlot::PlotLine("Microfono 1", data->signal_a, 44000);
+                ImPlot::PlotLine("Microfono 2", data->signal_b, 44000);
+                //ImPlot::PlotLine("vector", (data->paraWAV).data(), 20000);
+                ImPlot::EndPlot();
+            }
+            ImGui::Text("n_count: %i", data->n_count);
+            if (isRecordFinish)
+            {
+                ImGui::Text("rms1: %f", rms1);
+                ImGui::Text("rms2: %f", rms2);
+                ImGui::Text("dB1: %f",  dB1);
+                ImGui::Text("dB2: %f",  dB2);
+                ImGui::Text("|dB2 - dB1| = %f", std::abs(dB2 - dB1));
+                if (ImPlot::BeginPlot("Plot"))
+                {
+                    ImPlot::PlotLine("Transformada", frec_spec, 22000);
+                    ImPlot::EndPlot();
+                }
             }
             ImGui::End();
 
-
-
-
-
-
-/*
-            ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-            ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox("Another Window", &show_another_window);
-
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-            if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text("counter = %d", counter);
-
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-            */
-            
-            
         }
 
-        // 3. Show another simple window.
-        if (show_another_window)
+        //CALCULO DEL FACTOR DE CALIBRACION
+
+        if(calibration_factor)
         {
-            ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text("Hello from another window!");
-            if (ImGui::Button("Close Me"))
-                show_another_window = false;
+            static bool is_a_stream_active = false;
+            static bool HI_started = false;
+            static bool HII_started = false;
+            ImGui::Begin("Calibration");
+            if(!HI_started && ImGui::Button("Grabar H_12_I"))
+            {
+                std::cout << "Hola! ya iniciamos stream HI\n";
+                tdi::initAudioCaptureForCalibration(&stream, HI_data, device_selected_idx);
+                Pa_Sleep(500);// me sicoseo
+                HI_started = true;
+                is_a_stream_active = true;
+            }
+            if(!HII_started && ImGui::Button("Grabar H_12_II"))
+            {
+                std::cout << "Hola! ya iniciamos stream HII\n";
+                tdi::initAudioCaptureForCalibration(&stream, HII_data, device_selected_idx);
+                Pa_Sleep(500);// me sicoseo
+                HII_started = true;
+                is_a_stream_active = true;
+            }
+            if(is_a_stream_active && Pa_IsStreamActive(stream) == 0)
+            {
+                Pa_Sleep(500);// me sicoseo
+                tdi::closeAudioCaptureForCalibration(&stream);
+                is_a_stream_active = false;
+            }
+            if (HI_started && ImPlot::BeginPlot("H_12_I"))
+            {
+                ImPlot::PlotLine("Microfono 1", HI_data->signal_a, 44000);
+                ImPlot::PlotLine("Microfono 2", HI_data->signal_b, 44000);
+                ImPlot::EndPlot();
+            }
+            if (HII_started && ImPlot::BeginPlot("H_12_II") )
+            {
+                ImPlot::PlotLine("Microfono 1", HII_data->signal_a, 44000);
+                ImPlot::PlotLine("Microfono 2", HII_data->signal_b, 44000);
+                ImPlot::EndPlot();
+            }
+            if(HI_started && HII_started && !is_a_stream_active && ImPlot::BeginPlot("Hc"))
+            {
+                //std::cout << "Alo?\n";
+                tdi::HFunction(HI_data->signal_a, HI_data->signal_b,  &H_12_I,  HI_data->fs);
+                tdi::HFunction(HII_data->signal_b,HII_data->signal_a, &H_12_II, HII_data->fs);
+                tdi::HcFunction(H_12_I,           H_12_II,            &Hc,      HI_data->fs/2);
+
+                ImPlot::PlotLine("H_12_I",  H_12_I,  22000);
+                ImPlot::PlotLine("H_12_II", H_12_II, 22000);
+                ImPlot::PlotLine("Hc",      Hc,      22000);
+                ImPlot::EndPlot();
+            }
             ImGui::End();
         }
-
-
-
-
-
+    
         // Rendering
         ImGui::Render();
         int display_w, display_h;
@@ -179,15 +252,28 @@ int main()
 
         glfwSwapBuffers(miVentana);
     }
+    if (Hc != nullptr)
+    {
+        delete data;
+        delete HI_data;
+        delete HII_data;
+        delete Hc;
+        delete H_12_I;
+        delete H_12_II;
+        std::cout << "ESTOY LIMPIO!\n";
+    }
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
-    //ImPlot::DestroyContext();
+    ImPlot::DestroyContext();
     ImGui::DestroyContext();
 
     glfwDestroyWindow(miVentana);
     glfwTerminate();
 
-    print("Hola Mundo!");
+    err = Pa_Terminate();
+    tdi::checkErr(err);
+
+    print("Chao Mundo!");
     return 0;
 }

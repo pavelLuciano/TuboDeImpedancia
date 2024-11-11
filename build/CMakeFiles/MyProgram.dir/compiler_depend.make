@@ -1952,6 +1952,7 @@ CMakeFiles/MyProgram.dir/src/Application.cpp.o: /home/pavel/Dev/TuboDeImpedancia
   /home/pavel/Dev/TuboDeImpedancia/dependencies/portaudio/include/portaudio.h \
   /home/pavel/Dev/TuboDeImpedancia/include/HolaMundo.h \
   /home/pavel/Dev/TuboDeImpedancia/include/audiocapture.h \
+  /home/pavel/Dev/TuboDeImpedancia/include/calibracion.h \
   /home/pavel/Dev/TuboDeImpedancia/include/preInitFunctions.h \
   /usr/include/GL/gl.h \
   /usr/include/GL/glew.h \
@@ -2076,14 +2077,18 @@ CMakeFiles/MyProgram.dir/src/Application.cpp.o: /home/pavel/Dev/TuboDeImpedancia
   /usr/include/c++/14.2.1/bits/refwrap.h \
   /usr/include/c++/14.2.1/bits/requires_hosted.h \
   /usr/include/c++/14.2.1/bits/specfun.h \
+  /usr/include/c++/14.2.1/bits/sstream.tcc \
   /usr/include/c++/14.2.1/bits/std_abs.h \
   /usr/include/c++/14.2.1/bits/stl_algobase.h \
+  /usr/include/c++/14.2.1/bits/stl_bvector.h \
   /usr/include/c++/14.2.1/bits/stl_construct.h \
   /usr/include/c++/14.2.1/bits/stl_function.h \
   /usr/include/c++/14.2.1/bits/stl_iterator.h \
   /usr/include/c++/14.2.1/bits/stl_iterator_base_funcs.h \
   /usr/include/c++/14.2.1/bits/stl_iterator_base_types.h \
   /usr/include/c++/14.2.1/bits/stl_pair.h \
+  /usr/include/c++/14.2.1/bits/stl_uninitialized.h \
+  /usr/include/c++/14.2.1/bits/stl_vector.h \
   /usr/include/c++/14.2.1/bits/streambuf.tcc \
   /usr/include/c++/14.2.1/bits/streambuf_iterator.h \
   /usr/include/c++/14.2.1/bits/string_view.tcc \
@@ -2091,6 +2096,7 @@ CMakeFiles/MyProgram.dir/src/Application.cpp.o: /home/pavel/Dev/TuboDeImpedancia
   /usr/include/c++/14.2.1/bits/uses_allocator.h \
   /usr/include/c++/14.2.1/bits/uses_allocator_args.h \
   /usr/include/c++/14.2.1/bits/utility.h \
+  /usr/include/c++/14.2.1/bits/vector.tcc \
   /usr/include/c++/14.2.1/bits/version.h \
   /usr/include/c++/14.2.1/cctype \
   /usr/include/c++/14.2.1/cerrno \
@@ -2122,6 +2128,7 @@ CMakeFiles/MyProgram.dir/src/Application.cpp.o: /home/pavel/Dev/TuboDeImpedancia
   /usr/include/c++/14.2.1/new \
   /usr/include/c++/14.2.1/ostream \
   /usr/include/c++/14.2.1/pstl/pstl_config.h \
+  /usr/include/c++/14.2.1/sstream \
   /usr/include/c++/14.2.1/stdexcept \
   /usr/include/c++/14.2.1/stdlib.h \
   /usr/include/c++/14.2.1/streambuf \
@@ -2143,6 +2150,7 @@ CMakeFiles/MyProgram.dir/src/Application.cpp.o: /home/pavel/Dev/TuboDeImpedancia
   /usr/include/c++/14.2.1/tuple \
   /usr/include/c++/14.2.1/type_traits \
   /usr/include/c++/14.2.1/typeinfo \
+  /usr/include/c++/14.2.1/vector \
   /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/atomic_word.h \
   /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/basic_file.h \
   /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/c++allocator.h \
@@ -2161,6 +2169,7 @@ CMakeFiles/MyProgram.dir/src/Application.cpp.o: /home/pavel/Dev/TuboDeImpedancia
   /usr/include/errno.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
+  /usr/include/fftw3.h \
   /usr/include/gnu/stubs-64.h \
   /usr/include/gnu/stubs.h \
   /usr/include/linux/errno.h \
@@ -2235,6 +2244,8 @@ CMakeFiles/MyProgram.dir/src/Application.cpp.o: /home/pavel/Dev/TuboDeImpedancia
 
 /usr/include/c++/14.2.1/bits/streambuf.tcc:
 
+/usr/include/c++/14.2.1/bits/stl_vector.h:
+
 /usr/include/c++/14.2.1/bits/stl_function.h:
 
 /usr/include/c++/14.2.1/bits/refwrap.h:
@@ -2272,6 +2283,8 @@ CMakeFiles/MyProgram.dir/src/Application.cpp.o: /home/pavel/Dev/TuboDeImpedancia
 /usr/include/c++/14.2.1/bits/basic_ios.h:
 
 /usr/include/c++/14.2.1/bits/allocator.h:
+
+/usr/include/c++/14.2.1/bits/sstream.tcc:
 
 /usr/include/c++/14.2.1/bits/alloc_traits.h:
 
@@ -2511,6 +2524,8 @@ CMakeFiles/MyProgram.dir/src/Application.cpp.o: /home/pavel/Dev/TuboDeImpedancia
 
 /usr/include/bits/mathcalls-helper-functions.h:
 
+/usr/include/fftw3.h:
+
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/avxifmaintrin.h:
 
 /usr/include/bits/time64.h:
@@ -2707,6 +2722,8 @@ CMakeFiles/MyProgram.dir/src/Application.cpp.o: /home/pavel/Dev/TuboDeImpedancia
 
 /usr/include/features.h:
 
+/usr/include/c++/14.2.1/sstream:
+
 /usr/include/bits/signum-generic.h:
 
 /usr/include/bits/cpu-set.h:
@@ -2720,6 +2737,8 @@ CMakeFiles/MyProgram.dir/src/Application.cpp.o: /home/pavel/Dev/TuboDeImpedancia
 /usr/include/c++/14.2.1/tr1/poly_hermite.tcc:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/ia32intrin.h:
+
+/usr/include/c++/14.2.1/bits/stl_uninitialized.h:
 
 /usr/include/bits/types/struct_sched_param.h:
 
@@ -2759,9 +2778,13 @@ CMakeFiles/MyProgram.dir/src/Application.cpp.o: /home/pavel/Dev/TuboDeImpedancia
 
 /usr/include/c++/14.2.1/concepts:
 
+/usr/include/c++/14.2.1/bits/stl_bvector.h:
+
 /usr/include/c++/14.2.1/bits/std_abs.h:
 
 /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/cpu_defines.h:
+
+/usr/include/c++/14.2.1/vector:
 
 /usr/include/bits/floatn-common.h:
 
@@ -2879,6 +2902,8 @@ CMakeFiles/MyProgram.dir/src/Application.cpp.o: /home/pavel/Dev/TuboDeImpedancia
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/avx512vnnivlintrin.h:
 
+/usr/include/c++/14.2.1/bits/vector.tcc:
+
 /usr/include/c++/14.2.1/bit:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/avx2intrin.h:
@@ -2890,6 +2915,8 @@ CMakeFiles/MyProgram.dir/src/Application.cpp.o: /home/pavel/Dev/TuboDeImpedancia
 /usr/include/c++/14.2.1/bits/ios_base.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/avx512bitalgvlintrin.h:
+
+/home/pavel/Dev/TuboDeImpedancia/include/calibracion.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/pkuintrin.h:
 
