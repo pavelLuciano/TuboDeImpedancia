@@ -198,4 +198,8 @@ void showDebugWindow(AudioMaster* am)
     ImGui::Text("%s", am->deviceSelectorInfo().c_str());
     ImGui::Text("%s", am->calibratorInfo().c_str());
     ImGui::End();
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 56316fb01c1d866dad15a55bbbc69e47243c297e
