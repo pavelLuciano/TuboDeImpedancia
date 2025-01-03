@@ -140,32 +140,23 @@ CMakeFiles/MyProgram.dir/src/Application.cpp.o: \
  /usr/include/c++/14.2.1/bits/basic_ios.tcc \
  /usr/include/c++/14.2.1/bits/ostream.tcc /usr/include/c++/14.2.1/istream \
  /usr/include/c++/14.2.1/bits/istream.tcc \
- /home/pavel/Dev/TuboDeImpedancia/include/preInitFunctions.h \
+ /home/pavel/Dev/TuboDeImpedancia/include/init_deps.h \
  /usr/include/GL/glew.h /usr/include/c++/14.2.1/cstdint \
  /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stdint.h \
  /usr/include/stdint.h /usr/include/bits/stdint-uintn.h \
  /usr/include/bits/stdint-least.h /usr/include/GL/glu.h \
  /usr/include/GL/gl.h /usr/include/GLFW/glfw3.h \
+ /home/pavel/Dev/TuboDeImpedancia/dependencies/imgui/backends/imgui_impl_opengl3.h \
  /home/pavel/Dev/TuboDeImpedancia/dependencies/imgui/imgui.h \
  /home/pavel/Dev/TuboDeImpedancia/dependencies/imgui/imconfig.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/float.h \
  /usr/include/string.h /usr/include/strings.h /usr/include/assert.h \
  /home/pavel/Dev/TuboDeImpedancia/dependencies/imgui/backends/imgui_impl_glfw.h \
- /home/pavel/Dev/TuboDeImpedancia/dependencies/imgui/backends/imgui_impl_opengl3.h \
  /home/pavel/Dev/TuboDeImpedancia/dependencies/implot/implot.h \
- /home/pavel/Dev/TuboDeImpedancia/include/audiocapture.h \
- /usr/include/c++/14.2.1/fstream /usr/include/c++/14.2.1/bits/codecvt.h \
- /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/basic_file.h \
- /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/c++io.h \
- /usr/include/c++/14.2.1/bits/fstream.tcc \
- /usr/include/c++/14.2.1/stdlib.h /usr/include/c++/14.2.1/cstring \
- /usr/include/c++/14.2.1/vector \
- /usr/include/c++/14.2.1/bits/stl_uninitialized.h \
- /usr/include/c++/14.2.1/bits/stl_vector.h \
- /usr/include/c++/14.2.1/bits/stl_bvector.h \
- /usr/include/c++/14.2.1/bits/vector.tcc /usr/include/c++/14.2.1/cmath \
- /usr/include/math.h /usr/include/bits/math-vector.h \
- /usr/include/bits/libm-simd-decl-stubs.h \
+ /home/pavel/Dev/TuboDeImpedancia/include/aumi_math.h \
+ /usr/include/fftw3.h /usr/include/c++/14.2.1/math.h \
+ /usr/include/c++/14.2.1/cmath /usr/include/math.h \
+ /usr/include/bits/math-vector.h /usr/include/bits/libm-simd-decl-stubs.h \
  /usr/include/bits/flt-eval-method.h /usr/include/bits/fp-logb.h \
  /usr/include/bits/fp-fast.h \
  /usr/include/bits/mathcalls-helper-functions.h \
@@ -183,7 +174,23 @@ CMakeFiles/MyProgram.dir/src/Application.cpp.o: \
  /usr/include/c++/14.2.1/tr1/poly_hermite.tcc \
  /usr/include/c++/14.2.1/tr1/poly_laguerre.tcc \
  /usr/include/c++/14.2.1/tr1/riemann_zeta.tcc \
+ /home/pavel/Dev/TuboDeImpedancia/include/Structs.h \
+ /home/pavel/Dev/TuboDeImpedancia/include/AudioMaster.h \
+ /home/pavel/Dev/TuboDeImpedancia/include/BasicAudioHandler.h \
+ /home/pavel/Dev/TuboDeImpedancia/include/AudioHandler.h \
  /home/pavel/Dev/TuboDeImpedancia/dependencies/portaudio/include/portaudio.h \
- /home/pavel/Dev/TuboDeImpedancia/include/calibracion.h \
- /usr/include/fftw3.h /usr/include/c++/14.2.1/sstream \
+ /home/pavel/Dev/TuboDeImpedancia/include/callback_func.h \
+ /home/pavel/Dev/TuboDeImpedancia/include/aumi_math.h \
+ /home/pavel/Dev/TuboDeImpedancia/include/SignalCalibrator.h \
+ /usr/include/c++/14.2.1/vector \
+ /usr/include/c++/14.2.1/bits/stl_uninitialized.h \
+ /usr/include/c++/14.2.1/bits/stl_vector.h \
+ /usr/include/c++/14.2.1/bits/stl_bvector.h \
+ /usr/include/c++/14.2.1/bits/vector.tcc \
+ /home/pavel/Dev/TuboDeImpedancia/include/BasicAudioHandler.h \
+ /home/pavel/Dev/TuboDeImpedancia/include/SignalCalibrator.h \
+ /usr/include/c++/14.2.1/fstream /usr/include/c++/14.2.1/bits/codecvt.h \
+ /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/basic_file.h \
+ /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/c++io.h \
+ /usr/include/c++/14.2.1/bits/fstream.tcc /usr/include/c++/14.2.1/sstream \
  /usr/include/c++/14.2.1/bits/sstream.tcc

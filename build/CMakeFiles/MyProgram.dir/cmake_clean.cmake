@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/MyProgram.dir/link.d"
   "CMakeFiles/MyProgram.dir/dependencies/imgui/backends/imgui_impl_glfw.cpp.o"
   "CMakeFiles/MyProgram.dir/dependencies/imgui/backends/imgui_impl_glfw.cpp.o.d"
   "CMakeFiles/MyProgram.dir/dependencies/imgui/backends/imgui_impl_opengl3.cpp.o"
@@ -21,6 +22,16 @@ file(REMOVE_RECURSE
   "CMakeFiles/MyProgram.dir/dependencies/implot/implot_items.cpp.o.d"
   "CMakeFiles/MyProgram.dir/src/Application.cpp.o"
   "CMakeFiles/MyProgram.dir/src/Application.cpp.o.d"
+  "CMakeFiles/MyProgram.dir/src/AudioMaster.cpp.o"
+  "CMakeFiles/MyProgram.dir/src/AudioMaster.cpp.o.d"
+  "CMakeFiles/MyProgram.dir/src/BasicAudioHandler.cpp.o"
+  "CMakeFiles/MyProgram.dir/src/BasicAudioHandler.cpp.o.d"
+  "CMakeFiles/MyProgram.dir/src/HcCalibrator.cpp.o"
+  "CMakeFiles/MyProgram.dir/src/HcCalibrator.cpp.o.d"
+  "CMakeFiles/MyProgram.dir/src/SignalCalibrator.cpp.o"
+  "CMakeFiles/MyProgram.dir/src/SignalCalibrator.cpp.o.d"
+  "CMakeFiles/MyProgram.dir/src/callback_func.cpp.o"
+  "CMakeFiles/MyProgram.dir/src/callback_func.cpp.o.d"
   "MyProgram"
   "MyProgram.pdb"
 )

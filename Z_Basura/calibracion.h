@@ -42,6 +42,9 @@ namespace tdi
         
         std::vector<float> paraWAV;
 
+        std::ofstream* l_signal;
+        std::ofstream* r_signal;
+
         float* signal_a;
         float* signal_b;
         int fs;
@@ -67,6 +70,8 @@ namespace tdi
         {
             delete[] signal_a;
             delete[] signal_b;
+            l_signal->close();
+            r_signal->close();
         }
 
         //ya no sirve si se calcula la media inmediatamente (ver abajo)
@@ -108,9 +113,15 @@ namespace tdi
         (void)timeInfo; //el tiempo no es relevante ya que lo mediremos en base a la frecuencia de muestreo fs
 
 
+
+         tdi::CalibrationData* data = (tdi::CalibrationData*) userData;
+        
+
         for (unsigned long i = 0; i < framesPerBuffer*2 ; i += 2) 
         {
             (*calibrationData).paraWAV.push_back(in[i]);
+            *(data->l_signal) << in[i] << "\n";
+            *(data->r_signal) << in[i+1] << "\n";
             if (!calibrationData->addData(in[i], in[i+1])) return paComplete;
         }
         return paContinue;
