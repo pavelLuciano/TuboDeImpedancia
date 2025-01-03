@@ -1,4 +1,8 @@
 /.vscode
-compile_commands.json
 /bin
 /docs/
+/Z_Basura
+/med4dic
+imgui.ini
+l_data
+r_data
